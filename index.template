@@ -1,0 +1,19 @@
+<html>
+    <head>
+        <title>Streaming video</title>
+    </head>
+    <body>
+
+    Embed code here:
+
+    <script>
+
+        // Set up socket
+        var ws = new WebSocket('ws://{{host}}:{{ports.socket}}');
+
+        ws.onopen = function(){
+            ws.send('listen:{{ports.udp}}');
+        };
+    </script>
+    </body>
+</html>
