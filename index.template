@@ -15,5 +15,12 @@
             ws.send('listen:{{ports.udp}}');
         };
     </script>
+
+    <script src="/javascript/broadway/avc-codec.js"></script>
+    <script src="/javascript/broadway/avc.js"></script>
+    <script src="/javascript/broadway/canvas.js"></script>
+    <script src="/javascript/broadway/glUtils.js"></script>
+    <script src="/javascript/broadway/sylvester.js"></script>
+    <script src="/javascript/broadway/util.js"></script>
     </body>
 </html>
