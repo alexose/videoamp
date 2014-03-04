@@ -3,7 +3,8 @@ var http        = require("http")
   , url         = require("url")
   , fs          = require("fs")
   , querystring = require("querystring")
-  , dgram       = require("dgram");
+  , dgram       = require("dgram")
+  , static      = require("node-static");
 
 var args = process.argv || [];
 
@@ -12,19 +13,39 @@ var ports = {
     socket: args[3] || 8080
 };
 
+var fileServer = new static.Server('./public');
+
 http.createServer(function(request, response) {
 
   var dest = request.url.split('/').pop()
     , port = parseInt(dest, 10);
 
-  if (isNaN(port)){
+  if (!isNaN(port)){
 
+    // Do stuff
+    serve(request, response, port);
+  } else if (dest === ''){
+
+    // README
     explain(response);
   } else {
 
-    serve(request, response, port);
-  }
+    // Serve static files
+    request.addListener('end', function(){
+      fileServer.serve(request, response, function(err, result){
 
+        if (err) { // There was an error serving the file
+          console.log("Error serving " + request.url + " - " + err.message);
+
+          // Respond to the client
+          response.writeHead(err.status, err.headers);
+          response.write('404');
+          response.end();
+        }
+      });
+    }).resume();
+
+  }
 }).listen(ports.host, function(){
   console.log('Server running on port ' + ports.host);
 });
@@ -52,7 +73,6 @@ function serve(request, response, port){
 
 // TODO
 function explain(response){
-
   respond(response, 'Hello');
 }
 
