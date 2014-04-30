@@ -103,13 +103,13 @@ wss.on('connection', function(ws){
 
       // Rebroadcast udp stream over socket
       udpSocket.on('message', function (msg, rinfo){
-          ws.broadcast(msg, { binary : true} );
+          ws.broadcast(msg, { binary : true } );
       });
     }
   });
 
   ws.on('close', function(){
-    udpSocket.close()
+    udpSocket.close();
     console.log('Stopped listening for video.');
-  })
+  });
 });
