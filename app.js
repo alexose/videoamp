@@ -16,10 +16,19 @@ var ports = {
     socket: args[3] || 8080
 };
 
+// Load minified scripts
+var scripts;
+try {
+  scripts = fs.readFileSync('scripts.js.min');
+} catch(e){
+  log.error('Could not load client scripts.  Did you run "make" yet?');
+}
+
 http.createServer(function(request, response) {
 
   var dest = request.url.split('/').pop()
     , port = parseInt(dest, 10);
+
 
   if (isNaN(port)){
 
@@ -44,7 +53,8 @@ function serve(request, response, port){
       var html = template
         .replace('{{ports.socket}}', ports.socket)
         .replace('{{ports.udp}}', port)
-        .replace('{{host}}', host);
+        .replace('{{host}}', host)
+        .replace('{{scripts}}', scripts);
 
       respond(response, html);
     });

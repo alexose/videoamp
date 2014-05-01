@@ -4,7 +4,7 @@
     </head>
     <body>
 
-    Embed code here:
+    Embed code: http://{{host}}/v/{{ports.socket}}
 
     <script>
 
@@ -14,6 +14,10 @@
         ws.onopen = function(){
             ws.send('listen:{{ports.udp}}');
         };
+
+        // Load remaining scripts
+        {{scripts}}
+
     </script>
     </body>
 </html>
