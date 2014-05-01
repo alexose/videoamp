@@ -3,7 +3,11 @@ var http        = require("http")
   , url         = require("url")
   , fs          = require("fs")
   , querystring = require("querystring")
+  , log         = require('npmlog')
   , dgram       = require("dgram");
+
+log.enableColor();
+log.level = 'verbose';
 
 var args = process.argv || [];
 
@@ -26,7 +30,7 @@ http.createServer(function(request, response) {
   }
 
 }).listen(ports.host, function(){
-  console.log('Server running on port ' + ports.host);
+  log.info('Server running on port ' + ports.host);
 });
 
 function serve(request, response, port){
@@ -45,7 +49,7 @@ function serve(request, response, port){
       respond(response, html);
     });
   } catch(e){
-    respond(response, 'Could not find Sieve library.  Did you run npm install?');
+    respond(response, e.toString());
   }
 
 }
@@ -53,7 +57,7 @@ function serve(request, response, port){
 // TODO
 function explain(response){
 
-  respond(response, 'Hello');
+  respond(response, 'Placeholder for a readme');
 }
 
 function respond(response, string, type, code){
@@ -98,7 +102,7 @@ wss.on('connection', function(ws){
       // UDP Welcome
       udpSocket.on('listening', function(){
         var address = udpSocket.address();
-        console.log('Listening for video stream on port ' + address.address + ':' + address.port);
+        log.info('Listening for video stream on port ' + address.address + ':' + address.port);
       });
 
       // Rebroadcast udp stream over socket
@@ -110,6 +114,6 @@ wss.on('connection', function(ws){
 
   ws.on('close', function(){
     udpSocket.close();
-    console.log('Stopped listening for video.');
+    log.warning('Stopped listening for video.');
   });
 });
